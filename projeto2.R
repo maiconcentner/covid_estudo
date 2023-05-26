@@ -3,6 +3,7 @@ library(dplyr)
 library(rstatix)
 library(ggplot2)
 library(plotly)
+library(graphics)
 
 #? SETANDO PASTA DE TRABALHO
 setwd("D:\\Mestrado\\Linguagem_R-Projeto_1\\Dados_covid\\dados-covid-sp-master\\data")
@@ -32,6 +33,32 @@ srag_sp_mod %>%
 #NAN = VALORES INDEFINIDOS
 srag_sp_mod %>% 
   sapply(function(x) sum(is.nan(x)))
+
+########
+
+#? ANALISE GRAFICA
+#? CONTAGEM COLUNA CS_SEXO
+table(srag_sp_mod$sexo)
+
+#GRAFICO DE BARRAS USANDO BARPLOT
+grafico_barras = table(srag_sp_mod$sexo)
+grafico_barras %>% 
+  barplot(col = 'yellow', main = 'Quantidade por sexo')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

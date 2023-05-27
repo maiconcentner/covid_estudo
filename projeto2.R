@@ -133,6 +133,66 @@ srag_sp_mod %>%
     layout(xaxis = list(title = "Raça"),
            yaxis = list(title = "Quantidade"))
 
+#? BOXPLOT PARA IDADE
+
+#idade
+
+srag_sp_mod$idade[srag_sp_mod$TP_IDADE == 2] <- 0 #deixando tudo em anos
+srag_sp_mod$idade[srag_sp_mod$TP_IDADE == 1] <- 0 #idem
+
+summary(srag_sp_mod$idade)
+srag_sp_mod$idade %>% boxplot() #recurso do R
+
+
+#identificando os outliers
+srag_sp_mod %>% 
+  identify_outliers(idade)
+
+#tratando outliers
+outliers <- c(boxplot.stats(srag_sp_mod$idade)$out)
+
+#criando uma tabela sem os outliers
+srag_atual <- srag_sp_mod[-c(which(srag_sp_mod$idade %in% outliers)),]
+
+srag_atual$idade %>% summary()
+srag_atual$idade %>% boxplot()
+
+
+#MONTANDO NO GGPLOT2 
+
+#com outlier
+srag_sp_mod %>% 
+  filter(!is.na(idade)) %>% 
+    ggplot(aes(x = " ", y = idade)) +
+    geom_boxplot(width = .3, outlier.colour = "purple")
+
+#sem outlier
+srag_atual %>% 
+  filter(!is.na(idade)) %>% 
+  ggplot(aes(x = " ", y = idade)) +
+  geom_boxplot(width = .3, outlier.colour = "purple")
+
+#COM PLOTLY
+
+srag_atual %>% 
+  plot_ly(y = srag_atual$idade,
+          type = "box") %>% 
+          layout(title = "BOXPLOT POR IDADE",
+                 yaxis = list(title = "Idade"))
+
+
+#? BOXPLOT COLETIVO
+
+par(mfrow = c(1,2)) #graficos na mesma linha
+srag_sp_mod$idade %>% boxplot(xlab = "Idade com outliers")
+srag_atual$idade %>% boxplot(xlab = "Idade sem outliers")
+
+
+
+
+
+
+
 
 
 

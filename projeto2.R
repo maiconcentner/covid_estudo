@@ -187,12 +187,26 @@ par(mfrow = c(1,2)) #graficos na mesma linha
 srag_sp_mod$idade %>% boxplot(xlab = "Idade com outliers")
 srag_atual$idade %>% boxplot(xlab = "Idade sem outliers")
 
+# GRÁFICOS UMA LINHA E DUAS COLUNAS
+par(mfrow=c(1,2))
+boxplot(idade ~ sexo, srag_atual, ylab = "Idade", xlab = "Sexo")
+boxplot(idade ~ CS_RACA, srag_atual, ylab = "Idade", xlab = "Raça")
+
+#ggplot2
+srag_atual %>% 
+  ggplot(aes(x = factor(sexo), y = idade)) +
+  geom_boxplot(fill = "dodgerblue") + 
+  labs(y = "idade",
+       x = "sexo",
+       title = "Distribuição das idades por sexo")
 
 
-
-
-
-
+#plotly
+srag_atual %>% 
+  plot_ly(y = srag_atual$idade, color = srag_atual$sexo,
+          type = "box") %>% 
+          layout(title = "BOXPLOT POR IDADE",
+                 xaxis = list(title = "Sexo"), yaxis = list(title = "Idade"))
 
 
 

@@ -208,8 +208,88 @@ srag_atual %>%
           layout(title = "BOXPLOT POR IDADE",
                  xaxis = list(title = "Sexo"), yaxis = list(title = "Idade"))
 
+####
+
+#? HISTOGRAMA PARA IDADE
+srag_atual$idade %>% 
+  hist(col = "blue", main = "SRAG POR IDADE",
+       xlab = "Distribuição das idades", ylab = "Frequência")
+
+
+srag_atual$idade %>% 
+  hist(probability = T, col = "green", main = "SRAG POR IDADE")
+  lines(density(srag_atual$idade), col = "red", lwd=3)#lwd aumenta a expessura
+
+#? CRIANDO A FUNÇÃO MODA
+  moda <- function(m){
+    valor_unico <- unique(m) #busca o valor único para a coluna valor
+    valor_unico[which.max(tabulate(match(m, valor_unico)))] #contabilizar
+  }
+
+moda(srag_atual$idade)
+
+#QQPLOT (GRÁFICO DE DISTRIBUIÇÃO NORMAL)
+srag_atual$idade %>% 
+  qqnorm(col = "gray")
+
+srag_atual$idade %>% 
+  qqline(col = "red")
+
+#verificando numericamente
+library(nortest)
+#teste de normalidade Shapiro-Wilk
+srag_atual$idade %>% shapiro.test() #só roda entre 3 e 5000 linhas
+
+#teste Anderson-Darling
+srag_atual$idade %>% ad.test()
+#!dist. não é normal
+
+
+#HISTOGRAMA NO GGPLOT2
+srag_atual %>% 
+  ggplot(aes(x = idade))+
+  geom_histogram(fill = "red", bins = 25)+
+  labs(title = "Histograma da idade",
+       subtitle = "SRAG",
+       x = "Idade", y = "Contagem")
+
+
+#COM O PLOTLY
+plot_ly(x = srag_atual$idade  , type = "histogram") %>% 
+  layout(title = "HISTOGRAMA POR IDADE",
+         xaxis = list(title = "Idade"), yaxis = list(title = "Quantidade"))
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
 
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+  

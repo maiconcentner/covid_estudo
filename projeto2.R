@@ -40,15 +40,33 @@ srag_sp_mod %>%
 #? CONTAGEM COLUNA CS_SEXO
 table(srag_sp_mod$sexo)
 
-#GRAFICO DE BARRAS USANDO BARPLOT
+#? GRAFICO DE BARRAS USANDO BARPLOT
 grafico_barras = table(srag_sp_mod$sexo)
 grafico_barras %>% 
   barplot(col = 'yellow', main = 'Quantidade por sexo')
 
+#? GRAFICO DE BARRAS COM GGPLOT2
+srag_sp_mod %>% 
+  ggplot(aes(x = sexo))+
+    geom_bar(fill = 'red')+
+      labs(title = "Quantidade por sexo", 
+           subtitle = "SRAG", 
+           x = "Sexo", y = "Contagem")
 
+#? GRAFICO POR RACA
+srag_sp_mod %>% 
+  sapply(function(x) sum(is.na(x))) #verificando dados vazios
 
+#? preenchendo os dados NA como IGNORADOS
+srag_sp_mod$CS_RACA[which(is.na(srag_sp_mod$CS_RACA))] <- 9
 
-
+#alterando os valores pelos nomes que constam no dicionario da base
+srag_sp_mod$CS_RACA[srag_sp_mod$CS_RACA == 1] <- "Branca"
+srag_sp_mod$CS_RACA[srag_sp_mod$CS_RACA == 2] <- "Preta"
+srag_sp_mod$CS_RACA[srag_sp_mod$CS_RACA == 3] <- "Amarela"
+srag_sp_mod$CS_RACA[srag_sp_mod$CS_RACA == 4] <- "Parda"
+srag_sp_mod$CS_RACA[srag_sp_mod$CS_RACA == 5] <- "Indígena"
+srag_sp_mod$CS_RACA[srag_sp_mod$CS_RACA == 9] <- "Ignorado"
 
 
 

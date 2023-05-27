@@ -68,16 +68,70 @@ srag_sp_mod$CS_RACA[srag_sp_mod$CS_RACA == 4] <- "Parda"
 srag_sp_mod$CS_RACA[srag_sp_mod$CS_RACA == 5] <- "Indígena"
 srag_sp_mod$CS_RACA[srag_sp_mod$CS_RACA == 9] <- "Ignorado"
 
+#CONTAGEM
+srag_sp_mod$CS_RACA %>% 
+  table()
+
+##GGPLOT2
+srag_sp_mod %>% 
+  ggplot(aes(x = CS_RACA))+
+    geom_bar(fill = 'blue')+
+      labs(title = "Quantidade por raça",
+           subtitle = "SRAG",
+           x = "Raça", y = "Contagem")
 
 
+#? GRÁFICO POR RAÇA, SEXO E REGIAO
+# verificando valores NA
 
+srag_sp_mod %>% 
+  sapply(function(x) sum(is.na(x)))
 
+#substituindo valores NA por 9
+srag_sp_mod$CS_ZONA[which(is.na(srag_sp_mod$CS_ZONA))] <- 9
 
+#renomeando os valores da coluna CS_ZONA
+srag_sp_mod$CS_ZONA[srag_sp_mod$CS_ZONA == 1] <- "Urbana"
+srag_sp_mod$CS_ZONA[srag_sp_mod$CS_ZONA == 2] <- "Rural"
+srag_sp_mod$CS_ZONA[srag_sp_mod$CS_ZONA == 3] <- "Periurbana"
+srag_sp_mod$CS_ZONA[srag_sp_mod$CS_ZONA == 9] <- "Ignorado"
 
+srag_sp_mod$CS_ZONA %>% 
+  table()
 
+#? GERANDO O GRÁFICO
+srag_sp_mod %>% 
+  ggplot(aes(x = CS_RACA, y = sexo, fill = factor(CS_ZONA))) +
+           geom_col(position = "dodge") +
+           labs(title = "Região por sexo e raça",
+                x = "Raça",
+                y = "Sexo",
+                fill = "Região")
 
+#? GERANDO O GRÁFICO NA HORIZONTAL
+srag_sp_mod %>% 
+  ggplot(aes(x = CS_RACA, y = sexo, fill = factor(CS_ZONA))) +
+  geom_col(position = "dodge") +
+  labs(title = "Região por sexo e raça",
+       x = "Raça",
+       y = "Sexo",
+       fill = "Região") +
+coord_flip()
 
+#? GRAFICO DE BARRAS EMPILHADO
+#! apenas exemplo, analise ficou meio sem sentido
 
+grafico <- aggregate(idade ~ sexo + CS_ZONA, data = srag_sp_mod, FUN = mean)
+
+grafico %>% 
+  ggplot(aes(x = CS_ZONA, y = idade, fill = factor(sexo))) + 
+  geom_col(position = "stack")
+
+#GRÁFICO COM O PLOTLY
+srag_sp_mod %>% 
+  plot_ly(x = ~CS_RACA) %>% 
+    layout(xaxis = list(title = "Raça"),
+           yaxis = list(title = "Quantidade"))
 
 
 
